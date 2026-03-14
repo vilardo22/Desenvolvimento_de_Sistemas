@@ -76,4 +76,27 @@ echo "<hr> Match: <br>". match($page){
     default => 'Nenhuma pagina'
 } . "<hr>";
 
+//Funções
+
+echo "<hr>";
+
+function ola() {
+    echo " <br >Olá <br>";
+}
+
+function soma($num1, $num2) : float{
+    return $num1 + $num2;
+}
+
+
+echo "Função soma " .soma(10,5);
+
+ola();
+function retorna_vetor(){
+    return [1,2,3];
+}
+
+[$um, $tres, $dois] = retorna_vetor();
+
+echo "<p>Vetor recebido em variavel = $um, $tres, $dois</p>";
 ?>
