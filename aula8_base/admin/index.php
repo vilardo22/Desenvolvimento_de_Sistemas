@@ -13,11 +13,9 @@ if(!isset($_SESSION["csrf_token"])|| !hash_equals($_SESSION
     die("falha no login");
 }
 
-    if(($_POST["login"]== $usuario && $_POST["senha"] === $senha)) {  
-        $_SESSION["user"] = $usuario;
-        
-    
-    }
+if ($_POST["login"] === $usuario && password_verify($_POST["senha"], $senha)) {  
+    $_SESSION["user"] = $usuario;
+}
 
 }
 
