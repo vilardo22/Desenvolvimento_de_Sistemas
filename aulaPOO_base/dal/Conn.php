@@ -1,0 +1,31 @@
+<?php 
+namespace App\Dal;
+
+use PDO;
+use PDOException;
+use Exception;
+
+abstract class Conn{
+    private static ?PDO $conn = null;
+    private static string $host = "localhost";
+    private static string $dbname = "aula";
+    private static string $user = "root";
+    private static string $password = "";
+
+    public static function getConn() : PDO {
+        if(self::$conn === null){
+          try{
+            self::$conn = new PDO(
+                "mysql:host=". self::$host . ";dbname=" . self::$dbname,
+                self::$user,
+                self::$password
+            );
+          } catch(\Throwable $th){
+            
+          }
+        }
+
+
+        return self::$conn;
+    } 
+}
