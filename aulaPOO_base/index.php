@@ -1,4 +1,14 @@
+<?php
+declare(strict_types=1);
 
+namespace App;
+
+require_once "./AutoLoad.php";
+
+
+use App\Controller\clienteController as Cliente;
+
+?>
 <!DOCTYPE HTML>
 <html lang="pt-br">
 <head>
@@ -17,10 +27,10 @@
         $page = $_GET["p"] ?? "home";
         match($page) {
             "home" => require_once("./view/home.php"),
-            "list" => "",
-            "cad" => "",
+            "list" => Cliente::listar(),
+            "cad" => Cliente::cadastrar(),
             "alt" => "",
-            "deletar" => "",
+            "deletar" => Cliente::deletar(),
             default => require_once("./view/404.php"),
         };
     ?>

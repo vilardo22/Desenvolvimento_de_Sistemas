@@ -1,4 +1,22 @@
+<?php
+namespace App\View;
 
+use App\Model\Cliente;
+
+class clienteView{
+    public static function listar($clientes, ?int $deletar = null): void {
+        if($deletar !== null): ?>
+        <div class="alert">
+            Voce deseja realmente deletar?
+            <a href="?p=deletar&deletar=<?=  $deletar ?>">Confirmar</a>
+            <a href="?p=list">Cancelar</a>
+            <span class="close" onclick="this.parentElement.style.display='nome'">
+                &times;
+            </span>
+        </div>
+            
+
+        <?php endif;?>
         <table>
             <thead>
                 <tr>
@@ -14,9 +32,32 @@
             <tbody>
 
             </tbody>
+            <?php foreach($clientes as $cliente): ?>
+                    <tr>
+                        <td><?= $cliente->getId() ?></td>
+                        <td><?= $cliente->getNome() ?></td>
+                        <td><?= $cliente->getSobrenome() ?></td>
+                        <td><?= $cliente->getDdd() ?></td>
+                        <td><?= $cliente->getTelefone() ?></td>
+                        <td><a href="?p=alt&alt=<?= $cliente->getId() ?>">Alterar</a></td>
+                        <td><a href="?p=deletar&del=<?php $cliente->getId()?>">Excluir</a></td>
+                        <td></td>
+                    </tr>
+            <?php endforeach;?>
         </table>
+        <?php
+    }
+    public static function formulario(?string $msg) : void {
+        if ($msg !== null): ?>
+        <div class="alert">
+            <?= $msg ?>
+        <span class="close" onclick="this.parentElement.style.display='none'">&times;</span>
+        </div>
+        
+        <?php endif; ?>
+        
 
-
+    
         <form action="<?= "?p=cad" ?>" method="post">
             <label>Nome:</label>
             <input type="text" name="nome" value="<?= "" ?>" >
@@ -34,3 +75,6 @@
                 Salvar
             </button>
         </form>
+        <?php
+    }
+}
