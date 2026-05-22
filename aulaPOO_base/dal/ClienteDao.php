@@ -12,13 +12,13 @@ abstract class ClienteDao{
         try {
         $pdo = Conn::getConn();    
         $sql = $pdo->prepare("INSERT INTO clientes (nome, sobrenome, ddd, telefone) VALUES (:nome, :sobrenome, :ddd, :telefone)");
+
     $sql->bindValue(":nome", $cliente->getNome(), PDO::PARAM_STR);
-
     $sql->bindValue(":sobrenome", $cliente->getSobrenome(), PDO::PARAM_STR);
-
     $sql->bindValue(":ddd", $cliente->getDdd(), PDO::PARAM_INT);
     $sql->bindValue(":telefone", $cliente->getTelefone(), PDO::PARAM_INT);
     $sql->execute();
+
     return (int) $pdo->lastInsertId();
     } catch (PDOException $e) {
         throw $e;
@@ -33,65 +33,77 @@ abstract class ClienteDao{
 
             $res = $sql->fetchAll(PDO::FETCH_ASSOC);
 
-            $clientes =[];
+            $clientes = [];
 
             foreach($res as $dados){
                 $clientes[] = Cliente::criar(
                     $dados["id"],
-                    $dados["ddd"],
+                    (int) $dados["ddd"],
                     $dados["telefone"],
                     $dados["nome"],
                     $dados["sobrenome"],
                 );
             }
-                return $clientes;
-                
+
+            return $clientes;
+
         }catch(PDOException $e){
             throw $e;
         }
     }
 
-    public static function buscarPorId(int $id) : ?Cliente{
+    public static function buscarPorId(int $id) : ?Cliente {
         try{
-                $pdo = Conn::getConn();
-                $sql = $pdo->prepare("SELECT * FROM clientes WHERE id=?");
-                $sql->execute([$id]);
-                $dados = $sql->fetch(PDO::FETCH_ASSOC);
+            $pdo = Conn::getConn();
+            $sql = $pdo->prepare("SELECT * FROM clientes WHERE id=?");
+            $sql->execute([$id]);
+            $dados = $sql->fetch(PDO::FETCH_ASSOC);
 
-                if(!$dados) return null;
+            if (!$dados) return null;
 
-                return Cliente::criar(
-                    $dados["id"],
-                    $dados["ddd"],
-                    $dados["telefone"],
-                    $dados["nome"],
-                    $dados["sobrenome"],
-                );
-
-
-        } catch (PDOException $e) {
+            return Cliente::criar(
+               $dados["id"], 
+               $dados["ddd"], 
+               $dados["telefone"], 
+               $dados["nome"], 
+               $dados["sobrenome"], 
+            );
+        }catch(PDOException $e){
             throw $e;
-            
         }
     }
 
-
-    public static function excluir(int $id) : void{
-        try{
+    public static function excluir(int $id) : void {
+        try {
             $pdo = Conn::getConn();
             $sql = $pdo->prepare("DELETE FROM clientes WHERE id=?");
             $sql->execute([$id]);
 
-            if($sql->rowCount()!==1){
-                throw new Exception("Erro ao deletar cliente");
+            if ($sql->rowCount() !== 1) {
+                throw new Exception("Erro ao deletar Cliente");
             }
-
-
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             throw $e;
         }
     }
 
-
-
+    public static function editar(Cliente $cliente) : void{
+        try{
+            $pdo = Conn::getConn();
+            $sql = $pdo->prepare("UPDATE clientes SET nome=?, sobrenome=?, ddd=?, telefone=? WHERE id=?");
+            $sql->execute([
+                $cliente->getNome(),
+                $cliente->getSobreome(),
+                $cliente->getDdd(),
+                $cliente->getTelefone(),
+                $cliente->getId()
+                ]
+            );
+            if($sql->rowCount() !==1){
+                throw new Exeception("Nenhum registro foi alterado");
+            }
+        }catch(PDOExeception $e) {
+            throw new PDOException("Erro ao editar");
+        }
+    }
 }

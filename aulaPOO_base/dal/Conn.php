@@ -9,7 +9,7 @@ use Exception;
 abstract class Conn{
     private static ?PDO $conn = null;
     private static string $host = "localhost:3307";
-    private static string $dbname = "aula15/05";
+    private static string $dbname = "aula";
     private static string $user = "root";
     private static string $password = "";
 
@@ -22,7 +22,7 @@ abstract class Conn{
                 self::$password
             );
         } catch (PDOException $e) {
-throw new Exception("Erro ao conectar ao banco de dados: " . $e->getMessage(), 1);    
+            throw new Exception("Erro ao conectar ao banco de dados: " . $e->getMessage(), 1);    
         }   
         }
         return self::$conn;

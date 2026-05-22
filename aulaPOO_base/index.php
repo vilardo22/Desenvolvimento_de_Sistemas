@@ -1,11 +1,8 @@
 <?php
 declare(strict_types=1);
-
 namespace App;
 
-require_once "./AutoLoad.php";
-
-
+require_once "./Autoload.php";
 use App\Controller\clienteController as Cliente;
 
 ?>
